@@ -8,12 +8,18 @@ import { FetchToDos_toDosList_items as ToDo } from '../../../shared/graphql-type
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export const ToDoRow: React.FC<Props> = ({ toDo, onDelete }) => {
+export const ToDoRow: React.FC<Props> = ({ toDo, onDelete, onUpdate }) => {
   const [button, setButton] = useState<HTMLButtonElement | null>(null);
 
   const onClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     setButton(e.currentTarget)
   }, []);
+
+  const handleUpdate = useCallback(() => {
+    onUpdate(toDo);
+
+    setButton(null);
+  }, [toDo, onUpdate]);
 
   const handleDelete = useCallback(() => {
     onDelete(toDo);
@@ -46,7 +52,7 @@ export const ToDoRow: React.FC<Props> = ({ toDo, onDelete }) => {
         open={Boolean(button)}
         onClose={() => setButton(null)}
       >
-        <MenuItem>
+        <MenuItem onClick={handleUpdate}>
           Update
         </MenuItem>
         <MenuItem onClick={handleDelete}>
@@ -59,5 +65,6 @@ export const ToDoRow: React.FC<Props> = ({ toDo, onDelete }) => {
 
 type Props = {
   toDo: ToDo,
-  onDelete: (selected: ToDo) => void
+  onDelete: (selected: ToDo) => void,
+  onUpdate: (selected: ToDo) => void
 }

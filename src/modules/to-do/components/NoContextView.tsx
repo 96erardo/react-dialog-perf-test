@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
+import ButtonGroup from '@material-ui/core/ButtonGroup'
+import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import TablePagination from '@material-ui/core/TablePagination';
 import SyncIcon from '@material-ui/icons/Sync';
 import { useToDos } from '../hooks/useToDos';
@@ -17,20 +18,27 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { ToDoRow } from './NoContextRow';
 import { makeStyles } from '@material-ui/core/styles';
 import { NoContextDeleteDialog } from './NoContextDeleteDialog';
+import { NoContextFormDialog } from './NoContextFormDialog';
 import { FetchToDos_toDosList_items as ToDo } from '../../../shared/graphql-types';
 
 const useStyle = makeStyles(theme => ({
   head: { backgroundColor: theme.palette.secondary.main },
   cell: { color: theme.palette.common.white },
+  icon: { '& MuiButton-startIcon': { marginRight: '0px' } }
 }))
 
 export const NoContextView: React.FC = () => {
   const { loading, items, count, page, setPage, refresh } = useToDos();
-  const [del, setDel] = useState<{ open: boolean, selected: ToDo | null }>({ open: false, selected: null });
+  const [del, setDel] = useState<DialogState>({ open: false, selected: null });
+  const [form, setForm] = useState<DialogState>({ open: false, selected: null });
   const classes = useStyle();
 
   const onDelete = useCallback((selected: ToDo) => {
     setDel({ open: true, selected });
+  }, []);
+
+  const onForm = useCallback((selected: ToDo | null = null) => {
+    setForm({ open: true, selected });
   }, []);
 
   return (
@@ -46,13 +54,21 @@ export const NoContextView: React.FC = () => {
         >
           <Typography variant="h4">To Dos</Typography>
           <Box>
-            <IconButton 
-              size="small"
-              disabled={loading}
-              onClick={refresh}
-            >
-              <SyncIcon />
-            </IconButton>
+            <ButtonGroup className={classes.icon} color="primary" variant="contained">
+              <Button 
+                color="secondary"
+                disabled={loading}
+                onClick={() => onForm()}
+              >
+                Create To Do
+              </Button>
+              <Button 
+                color="secondary"
+                disabled={loading}
+                onClick={refresh}
+                startIcon={<SyncIcon />}
+              />
+            </ButtonGroup>
           </Box>
         </Box>
         <Divider />
@@ -92,6 +108,7 @@ export const NoContextView: React.FC = () => {
                   key={toDo.id} 
                   toDo={toDo}
                   onDelete={onDelete}
+                  onUpdate={onForm}
                 />
               ))
             )}
@@ -108,10 +125,21 @@ export const NoContextView: React.FC = () => {
           />
         </Box>
       </Card>
-      <NoContextDeleteDialog 
+      <NoContextDeleteDialog
         open={del.open}
-        setOpen={(open: boolean) => setDel(state => ({ ...state, open }))}
+        selected={del.selected}
+        setDialog={setDel}
+      />
+      <NoContextFormDialog 
+        open={form.open}
+        selected={form.selected}
+        setDialog={setForm}
       />
     </Container>
   )
+}
+
+type DialogState = {
+  open: boolean,
+  selected: ToDo | null
 }

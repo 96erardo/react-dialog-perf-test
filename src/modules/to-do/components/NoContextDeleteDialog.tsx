@@ -1,16 +1,19 @@
-import React, { useCallback } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
+import { 
+  FetchToDos_toDosList_items as ToDo
+} from '../../../shared/graphql-types';
 
-export const NoContextDeleteDialog: React.FC<Props> = ({ open, setOpen }) => {
+export const NoContextDeleteDialog: React.FC<Props> = ({ open, setDialog }) => {
 
   const onClose = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
+    setDialog({ open: false, selected: null });
+  }, [setDialog]);
 
 
   return (
@@ -35,5 +38,6 @@ export const NoContextDeleteDialog: React.FC<Props> = ({ open, setOpen }) => {
 
 type Props = {
   open: boolean,
-  setOpen: (open: boolean) => void,
+  selected: ToDo | null,
+  setDialog: Dispatch<SetStateAction<{ open: boolean, selected: ToDo | null }>>,
 }
