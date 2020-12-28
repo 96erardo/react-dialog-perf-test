@@ -5,14 +5,26 @@ import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import TablePagination from '@material-ui/core/TablePagination';
 import SyncIcon from '@material-ui/icons/Sync';
 import { useToDos } from '../hooks/useToDos';
-import MaterialTable from 'material-table';
-import { columns } from '../to-do-model';
-import { icons } from '../../../shared/config/table-icons';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { ToDoRow } from './ToDoRow';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyle = makeStyles(theme => ({
+  head: { backgroundColor: theme.palette.secondary.main },
+  cell: { color: theme.palette.common.white },
+}))
 
 export const NoContextView: React.FC = () => {
   const { loading, items, count, page, setPage, refresh } = useToDos();
+  const classes = useStyle();
 
   return (
     <Container maxWidth="md">
@@ -29,7 +41,7 @@ export const NoContextView: React.FC = () => {
           <Box>
             <IconButton 
               size="small"
-              disabled={loading} 
+              disabled={loading}
               onClick={refresh}
             >
               <SyncIcon />
@@ -37,29 +49,62 @@ export const NoContextView: React.FC = () => {
           </Box>
         </Box>
         <Divider />
-        <MaterialTable 
-          columns={columns}
-          data={items}
-          page={page}
-          icons={icons}
-          onChangePage={setPage}
-          isLoading={loading}
-          totalCount={count}
-          components={{
-            Container: Box
-          }}
-          options={{
-            pageSize: 10,
-            search: false,
-            toolbar: false,
-            showTitle: false,
-            pageSizeOptions: [],
-            headerStyle: {
-              backgroundColor: '#f50057',
-              color: '#fff',
-            }
-          }}
-        />
+        <Table size="small">
+          <TableHead className={classes.head}>
+            <TableRow>
+              <TableCell 
+                variant="head" 
+                className={classes.cell}
+              />                
+              <TableCell 
+                variant="head" 
+                className={classes.cell}
+              >
+                Title
+              </TableCell>
+              <TableCell 
+                variant="head" 
+                className={classes.cell}
+              >
+                Description
+              </TableCell>
+              <TableCell 
+                variant="head" 
+                className={classes.cell}
+              >
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={4}>
+                  <Box py={4} display="flex" justifyContent="center">
+                    <CircularProgress 
+                      variant="indeterminate" 
+                      color="secondary"
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : (
+              items.map(toDo => (
+                <ToDoRow key={toDo.id} toDo={toDo} />
+              ))
+            )}
+          </TableBody>
+        </Table>
+        <Box display="flex" flexDirection="row" justifyContent="center">
+          <TablePagination 
+            rowsPerPage={10}
+            rowsPerPageOptions={[]}
+            component="div"
+            count={count}
+            page={page - 1}
+            onChangePage={(event, value) => setPage(value + 1)}
+          />
+        </Box>
       </Card>
     </Container>
   )
