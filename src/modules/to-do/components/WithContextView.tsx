@@ -14,7 +14,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { ToDoRow } from './ToDoRow';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyle = makeStyles(theme => ({
@@ -23,7 +22,7 @@ const useStyle = makeStyles(theme => ({
 }))
 
 export const WithContextView: React.FC = () => {
-  const { loading, items, count, page, setPage, refresh } = useToDos();
+  const { loading, count, page, setPage, refresh } = useToDos();
   const classes = useStyle();
 
   return (
@@ -88,11 +87,7 @@ export const WithContextView: React.FC = () => {
                   </Box>
                 </TableCell>
               </TableRow>
-            ) : (
-              items.map(toDo => (
-                <ToDoRow key={toDo.id} toDo={toDo} />
-              ))
-            )}
+            ) : null}
           </TableBody>
         </Table>
         <Box display="flex" flexDirection="row" justifyContent="center">

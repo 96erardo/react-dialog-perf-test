@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
@@ -14,8 +14,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { ToDoRow } from './ToDoRow';
+import { ToDoRow } from './NoContextRow';
 import { makeStyles } from '@material-ui/core/styles';
+import { NoContextDeleteDialog } from './NoContextDeleteDialog';
+import { FetchToDos_toDosList_items as ToDo } from '../../../shared/graphql-types';
 
 const useStyle = makeStyles(theme => ({
   head: { backgroundColor: theme.palette.secondary.main },
@@ -24,7 +26,12 @@ const useStyle = makeStyles(theme => ({
 
 export const NoContextView: React.FC = () => {
   const { loading, items, count, page, setPage, refresh } = useToDos();
+  const [del, setDel] = useState<{ open: boolean, selected: ToDo | null }>({ open: false, selected: null });
   const classes = useStyle();
+
+  const onDelete = useCallback((selected: ToDo) => {
+    setDel({ open: true, selected });
+  }, []);
 
   return (
     <Container maxWidth="md">
@@ -56,22 +63,13 @@ export const NoContextView: React.FC = () => {
                 variant="head" 
                 className={classes.cell}
               />                
-              <TableCell 
-                variant="head" 
-                className={classes.cell}
-              >
+              <TableCell variant="head" className={classes.cell}>
                 Title
               </TableCell>
-              <TableCell 
-                variant="head" 
-                className={classes.cell}
-              >
+              <TableCell variant="head" className={classes.cell}>
                 Description
               </TableCell>
-              <TableCell 
-                variant="head" 
-                className={classes.cell}
-              >
+              <TableCell variant="head" className={classes.cell}>
                 Actions
               </TableCell>
             </TableRow>
@@ -90,7 +88,11 @@ export const NoContextView: React.FC = () => {
               </TableRow>
             ) : (
               items.map(toDo => (
-                <ToDoRow key={toDo.id} toDo={toDo} />
+                <ToDoRow 
+                  key={toDo.id} 
+                  toDo={toDo}
+                  onDelete={onDelete}
+                />
               ))
             )}
           </TableBody>
@@ -106,6 +108,10 @@ export const NoContextView: React.FC = () => {
           />
         </Box>
       </Card>
+      <NoContextDeleteDialog 
+        open={del.open}
+        setOpen={(open: boolean) => setDel(state => ({ ...state, open }))}
+      />
     </Container>
   )
 }
