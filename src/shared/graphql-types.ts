@@ -45,6 +45,103 @@ export interface FetchToDosVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: CreateToDo
+// ====================================================
+
+export interface CreateToDo_toDoCreate {
+  __typename: "ToDo";
+  id: string | null;
+  identifier: number | null;
+  title: string | null;
+  description: string | null;
+  finished: boolean | null;
+  createdAt: any | null;
+}
+
+export interface CreateToDo {
+  toDoCreate: CreateToDo_toDoCreate;
+}
+
+export interface CreateToDoVariables {
+  data: ToDoCreateInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpdateToDo
+// ====================================================
+
+export interface UpdateToDo_toDoUpdate {
+  __typename: "ToDo";
+  id: string | null;
+  identifier: number | null;
+  title: string | null;
+  description: string | null;
+  finished: boolean | null;
+  createdAt: any | null;
+}
+
+export interface UpdateToDo {
+  toDoUpdate: UpdateToDo_toDoUpdate;
+}
+
+export interface UpdateToDoVariables {
+  filter?: ToDoKeyFilter | null;
+  data: ToDoUpdateInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: DeleteToDo
+// ====================================================
+
+export interface DeleteToDo_toDoDelete {
+  __typename: "SuccessResponse";
+  success: boolean | null;
+}
+
+export interface DeleteToDo {
+  toDoDelete: DeleteToDo_toDoDelete | null;
+}
+
+export interface DeleteToDoVariables {
+  filter?: ToDoKeyFilter | null;
+  force?: boolean | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL fragment: ToDoFragment
+// ====================================================
+
+export interface ToDoFragment {
+  __typename: "ToDo";
+  id: string | null;
+  identifier: number | null;
+  title: string | null;
+  description: string | null;
+  finished: boolean | null;
+  createdAt: any | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
@@ -390,6 +487,15 @@ export interface TeamMemberRelationFilter {
   none?: TeamMemberFilter | null;
 }
 
+/**
+ * ToDo create input
+ */
+export interface ToDoCreateInput {
+  title: string;
+  description: string;
+  finished?: boolean | null;
+}
+
 export interface ToDoFilter {
   id?: IDPredicate | null;
   createdAt?: DateTimePredicate | null;
@@ -405,6 +511,11 @@ export interface ToDoFilter {
   OR?: ToDoFilter[] | null;
 }
 
+export interface ToDoKeyFilter {
+  id?: string | null;
+  identifier?: number | null;
+}
+
 export interface ToDoSort {
   id?: SortOrder | null;
   createdAt?: SortOrder | null;
@@ -415,6 +526,16 @@ export interface ToDoSort {
   description?: SortOrder | null;
   finished?: SortOrder | null;
   createdBy?: UserSort | null;
+}
+
+/**
+ * ToDo update input
+ */
+export interface ToDoUpdateInput {
+  id?: string | null;
+  title?: string | null;
+  description?: string | null;
+  finished?: boolean | null;
 }
 
 export interface UserFilter {

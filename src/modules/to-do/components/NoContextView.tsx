@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
@@ -28,10 +28,16 @@ const useStyle = makeStyles(theme => ({
 }))
 
 export const NoContextView: React.FC = () => {
-  const { loading, items, count, page, setPage, refresh } = useToDos();
+  const { loading, items, count, page, error, setPage, refresh } = useToDos();
   const [del, setDel] = useState<DialogState>({ open: false, selected: null });
   const [form, setForm] = useState<DialogState>({ open: false, selected: null });
   const classes = useStyle();
+
+  useEffect(() => {
+    if (error) {
+      alert(error.message);
+    }
+  }, [error]);
 
   const onDelete = useCallback((selected: ToDo) => {
     setDel({ open: true, selected });
@@ -134,6 +140,7 @@ export const NoContextView: React.FC = () => {
         open={form.open}
         selected={form.selected}
         setDialog={setForm}
+        onSubmitted={refresh}
       />
     </Container>
   )

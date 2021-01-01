@@ -9,6 +9,7 @@ import Switch from '@material-ui/core/Switch';
 import { 
   FetchToDos_toDosList_items as ToDo 
 } from '../../../shared/graphql-types';
+import { createToDo, updateToDo } from '../to-do-actions';
 import { makeStyles } from '@material-ui/core/styles';
 
 const initialState = {
@@ -25,8 +26,9 @@ const useStyle = makeStyles(theme => ({
   }
 }))
 
-export const NoContextFormDialog: React.FC<Props> = ({ open, selected, setDialog }) => {
+export const NoContextFormDialog: React.FC<Props> = ({ open, selected, setDialog, onSubmitted }) => {
   const [form, setForm] = useState<Form>(initialState);
+  const [loading, setLoading] = useState(false);
   const classes = useStyle();
 
   useEffect(() => {
@@ -55,10 +57,41 @@ export const NoContextFormDialog: React.FC<Props> = ({ open, selected, setDialog
     }))
   }, []);
 
+  const onSubmit = useCallback(async () => {
+    setLoading(true);
+
+    const [err, data] = selected ? (
+      await updateToDo({
+        id: selected.id || '',
+        title: form.title,
+        description: form.description,
+        finished: form.finished
+      })
+    ) : (
+      await createToDo({
+        title: form.title,
+        description: form.description,
+        finished: form.finished,
+      })        
+    );
+
+    setLoading(false);
+
+    if (err) {
+      alert(err.message);
+    }
+
+    if (data) {
+      onSubmitted();
+    }
+
+    setDialog({ open: false, selected: null });
+  }, [form, selected, setDialog, onSubmitted]);
+
   return (
     <Dialog maxWidth="sm" open={open}>
       <DialogTitle>
-        {selected ? 'Create To Do' : 'Update To Do'}
+        {selected ? 'Update To Do' : 'Create To Do'}
       </DialogTitle>
       <DialogContent className={classes.root}>
         <TextField 
@@ -86,10 +119,18 @@ export const NoContextFormDialog: React.FC<Props> = ({ open, selected, setDialog
         />
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={onClose}>
+        <Button 
+          color="primary"
+          disabled={loading}
+          onClick={onClose}
+        >
           Cancel
         </Button>
-        <Button color="primary">
+        <Button 
+          color="primary"
+          disabled={loading} 
+          onClick={onSubmit}
+        >
           Save
         </Button>
       </DialogActions>
@@ -100,7 +141,8 @@ export const NoContextFormDialog: React.FC<Props> = ({ open, selected, setDialog
 type Props = {
   open: boolean,
   selected: ToDo | null,
-  setDialog: Dispatch<SetStateAction<{ open: boolean, selected: ToDo | null }>>
+  setDialog: Dispatch<SetStateAction<{ open: boolean, selected: ToDo | null }>>,
+  onSubmitted: () => void
 }
 
 type Form = {
