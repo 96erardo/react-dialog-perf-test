@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import { 
   FetchToDos_toDosList_items as ToDo 
-} from '../../../shared/graphql-types';
+} from '../../shared/graphql-types';
 import { createToDo, updateToDo } from '../to-do-actions';
 import { makeStyles } from '@material-ui/core/styles';
 

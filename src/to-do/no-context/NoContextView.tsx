@@ -19,7 +19,7 @@ import { ToDoRow } from './NoContextRow';
 import { makeStyles } from '@material-ui/core/styles';
 import { NoContextDeleteDialog } from './NoContextDeleteDialog';
 import { NoContextFormDialog } from './NoContextFormDialog';
-import { FetchToDos_toDosList_items as ToDo } from '../../../shared/graphql-types';
+import { FetchToDos_toDosList_items as ToDo } from '../../shared/graphql-types';
 
 const useStyle = makeStyles(theme => ({
   head: { backgroundColor: theme.palette.secondary.main },
