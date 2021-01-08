@@ -10,6 +10,8 @@ export class DialogContext extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props);
 
+    this.state = {};
+
     this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
   }
