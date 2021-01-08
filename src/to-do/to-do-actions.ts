@@ -1,5 +1,5 @@
-import { client } from '../../shared/config/client';
-import { QueryResult, MutationResult } from '../../shared/types';
+import { client } from '../shared/config/client';
+import { QueryResult, MutationResult } from '../shared/types';
 import { 
   FETCH_TO_DOS,
   CREATE_TO_DO,
@@ -17,7 +17,7 @@ import {
   UpdateToDoVariables,
   DeleteToDo, 
   DeleteToDoVariables
-} from '../../shared/graphql-types';
+} from '../shared/graphql-types';
 
 /**
  * Fetches a list of todos

@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import { 
   FetchToDos_toDosList_items as ToDo
-} from '../../../shared/graphql-types';
+} from '../../shared/graphql-types';
 
 export const NoContextDeleteDialog: React.FC<Props> = ({ open, setDialog }) => {
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
-import { FetchToDos_toDosList_items as ToDo } from '../../../shared/graphql-types';
+import { FetchToDos_toDosList_items as ToDo } from '../../shared/graphql-types';
 import { fetchToDos } from '../to-do-actions';
 
 const initialState = {
