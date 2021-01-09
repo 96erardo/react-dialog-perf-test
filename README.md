@@ -137,5 +137,7 @@ Closing the dialog took about 42ms to render. Other thing to note here is that e
 
 ![with-context-todo-form](images/context-open-form-2.png "Opening the To Do form dialog with context")
 
-As you can see in the images, opening the dialog using a global state needed to commits to make the ui changes, first, a commit that lasted 1.2ms that changed the state in the context, and the second 
+As you can see in the images, opening the dialog using a global state needed to commits to make the ui changes, first, a commit that lasted 1.2ms that changed the state in the context, and the second 6.6ms to make a total of 7.8ms in comparison with the 36ms that took on the no-context alternative.
+
+One important aspect of the context approach, is that when the dialog opens, react only renders the context and that specific dialog that we a opening, this means that adding more dialogs to the parent component does not have to lower performance over time.
 
