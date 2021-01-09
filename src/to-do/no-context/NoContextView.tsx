@@ -58,7 +58,7 @@ export const NoContextView: React.FC = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h4">To Dos</Typography>
+          <Typography variant="h4">No Context - To Dos</Typography>
           <Box>
             <ButtonGroup className={classes.icon} color="primary" variant="contained">
               <Button 

@@ -1,46 +1,141 @@
-# Getting Started with Create React App
+# Dialog paradign performance test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project aims to compare the performance between two Dialog Component usage paradigms in React that i have seen in a few projects. The app shows a navigation bar with two sections where each section represents a paradigm.
 
-## Available Scripts
+![App screenshot](images/screenshot.png "Application screenshot")
 
-In the project directory, you can run:
+As you can see in the image above, the app is just a basic CRUD interface for things the user should do. The first section is called "no-context" because the dialogs here are handled with no context state, just local state in the parent component, which introduces code like this:
 
-### `npm start`
+```js
+function Parent () {
+  const [form, setForm] = useState({ open: false, selected: null });
+  const [del, setDel] = useState({ open: false, selected: null });
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  const onCreate = () => {/* Change state in form to open the dialog */}
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  const onUpdate = () => {/* Change state in form to open the dialog */}
 
-### `npm test`
+  const onCloseForm = () => {/* Change state in form to close it */}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  const onDelete = () => {/* Change state in del to open the dialog */}
 
-### `npm run build`
+  const onCloseDelete = () => {/* Change state in del to close it */}
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  return (
+    <div>
+      <Button onClick={onCreate} />
+      <Table 
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+      />
+      <ToDoFormDialog 
+        open={form.open}
+        toDo={form.selected}
+        onClose={onCloseForm}
+      />
+      <DeleteDialog 
+        open={del.open}
+        toDo={del.selected}
+        onClose={onCloseDelete}
+      />
+    </div>
+  )
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+On the other hand we have a context alternative that introduces code like this:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+  function Parent () {
+  const openDialog = useDialogOpener();
 
-### `npm run eject`
+  const onCreate = () => {
+    /**
+     * T represents the type of the
+     * parameters needed by the dialog 
+     * when opening
+     */
+    openDialog<T>('<dialog-id>', T);
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  return (
+    <div>
+      <Table />
+      <ToDoFormDialog />
+      <DeleteDialog />
+    </div>
+  )
+}
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+function TableItem () {
+  const openDialog = useDialogOpener();
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  const onUpdate = () => openDialog<T>('form-dialog-id', T);
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  const onDelete = () => openDialog<T>('del-dialog-id', T);
 
-## Learn More
+  return (
+    <Item />
+  )
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+function ToDoFormDialog () {
+  const { open, params } = useDialogParams('form-dialog-id');
+  const closeDialog = useDialogCloser();
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  return (
+    // ...
+  )
+}
+```
+
+
+## Installation
+
+First of all, to install dependencies run in the command line on project folder:
+
+```
+  npm run install
+```
+
+The app information is stored on [8base](https://www.8base.com/), a BAAS with an interface for building mysql tables, for this project the schema is:
+
+### ToDo
+| Name        | Type                   |
+|-------------|------------------------|
+| identifier  | number (Autoincrement) |
+| title       | string                 |
+| description | string                 |
+| finished    | switch                 |
+
+The app does not require authentication so remember to change authorization rights on 8base for Guests so they can also list, create, update and delete To Dos.
+
+One you have 8base configured, you just need to run:
+
+```
+  npm run start
+```
+
+## Results
+To compare the performance on the two approaches the React Profiler Tool was used, lets go first with the "no-context" approach
+
+### No Context
+#### Opening the **create to-do** dialog
+
+![no-context-todo-form](images/no-context-open-form.png "Opening To Do form dialog with no context")
+
+As you can see, the app took about 36ms to render the dialog, having a direct impact in the component that contained it.
+
+#### Closing the **create to-do** dialog
+![no-context-todo-form](images/no-context-close-form.png "Closing To Do form dialog with no context")
+
+Closing the dialog took about 42ms to render. Other thing to note here is that even when we only opened the ToDo form dialog, the delete dialog also needed computations to render, as well as every item in the table, as this view only has a two dialogs to handle, the performance in practice does not seem to be so bad, but as this view gets more complex the performance is going to be slower.
+
+### With Context
+### Opening the **create to-do** dialog
+![with-context-todo-form](images/context-open-form-1.png "Opening the To Do form dialog with context")
+
+![with-context-todo-form](images/context-open-form-2.png "Opening the To Do form dialog with context")
+
+As you can see in the images, opening the dialog using a global state needed to commits to make the ui changes, first, a commit that lasted 1.2ms that changed the state in the context, and the second 
+
