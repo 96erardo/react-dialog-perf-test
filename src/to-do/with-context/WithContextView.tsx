@@ -28,12 +28,12 @@ const useStyle = makeStyles(theme => ({
 
 export const WithContextView: React.FC = () => {
   const { items, loading, count, page, setPage, refresh } = useToDos();
-  const openFormDialog = useDialogOpener<Params>();
+  const openDialog = useDialogOpener();
   const classes = useStyle();
 
   const onForm = useCallback(() => {
-    openFormDialog(modalId, { toDo: null });
-  }, [openFormDialog]);
+    openDialog<Params>(modalId, { toDo: null });
+  }, [openDialog]);
 
   return (
     <Container maxWidth="md">

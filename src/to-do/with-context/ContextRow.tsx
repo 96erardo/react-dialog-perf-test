@@ -18,8 +18,7 @@ import {
 import { useDialogOpener } from '../hooks/useDialogOpener';
 
 export const ToDoRow: React.FC<Props> = ({ toDo }) => {
-  const openFormdialog = useDialogOpener<FormParams>();
-  const openDeleteDialog = useDialogOpener<DeleteParams>();
+  const openDialog = useDialogOpener();
   const [button, setButton] = useState<HTMLButtonElement | null>(null);
 
   const onClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
@@ -27,16 +26,16 @@ export const ToDoRow: React.FC<Props> = ({ toDo }) => {
   }, []);
 
   const handleUpdate = useCallback(() => {
-    openFormdialog(formDialogId, { toDo });
+    openDialog<FormParams>(formDialogId, { toDo });
 
     setButton(null);
-  }, [toDo, openFormdialog]);
+  }, [toDo, openDialog]);
 
   const handleDelete = useCallback(() => {
-    openDeleteDialog(deleteDialogId, { selected: toDo });
+    openDialog<DeleteParams>(deleteDialogId, { selected: toDo });
 
     setButton(null)
-  }, [toDo, openDeleteDialog]);
+  }, [toDo, openDialog]);
 
   return (
     <TableRow>

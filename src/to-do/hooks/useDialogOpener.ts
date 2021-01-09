@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { OpenerContext, Opener } from '../with-context/DialogContext';
 
-export function useDialogOpener<T>() {
-  const openDialog = useContext<Opener<T>>(OpenerContext);
+export function useDialogOpener () {
+  const openDialog = useContext<Opener>(OpenerContext);
 
   return openDialog;
 }

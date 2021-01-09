@@ -16,7 +16,7 @@ export class DialogContext extends React.Component<Props, State> {
     this.closeDialog = this.closeDialog.bind(this);
   }
 
-  openDialog(id: string, params: any) {
+  openDialog<T = any>(id: string, params: T) {
     this.setState(prevState => ({
       ...prevState,
       [id]: {
@@ -57,6 +57,6 @@ export type State<T = any> = {
   }
 }
 
-export type Opener<T = any> = (id: string, params: T) => void;
+export type Opener = <T= any>(id: string, params: T) => void;
 
 export type Closer = (id: string) => void
