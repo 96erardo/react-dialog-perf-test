@@ -5,8 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import { useDialogParams } from '../hooks/useDialogParams';
-import { useDialogCloser } from '../hooks/useDialogCloser';
+import { useDialogParams, useDialogCloser } from 'react-dialog-handler';
 import { 
   FetchToDos_toDosList_items as ToDo
 } from '../../shared/graphql-types';

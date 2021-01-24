@@ -17,8 +17,9 @@ import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { ContextFormDialog, Params, modalId } from './ContextFormDialog';
+import { ContextDeleteDialog } from './ContextDeleteDialog';
 import { ToDoRow } from './ContextRow';
-import { useDialogOpener } from '../hooks/useDialogOpener';
+import { useDialogOpener } from 'react-dialog-handler';
 
 const useStyle = makeStyles(theme => ({
   head: { backgroundColor: theme.palette.secondary.main },
@@ -127,6 +128,7 @@ export const WithContextView: React.FC = () => {
         </Box>
       </Card>
       <ContextFormDialog onSubmitted={refresh} />
+      <ContextDeleteDialog />
     </Container>
   )
 }

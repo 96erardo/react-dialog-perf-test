@@ -15,7 +15,7 @@ import {
   Params as DeleteParams,
   modalId as deleteDialogId,
 } from './ContextDeleteDialog';
-import { useDialogOpener } from '../hooks/useDialogOpener';
+import { useDialogOpener } from 'react-dialog-handler';
 
 export const ToDoRow: React.FC<Props> = ({ toDo }) => {
   const openDialog = useDialogOpener();

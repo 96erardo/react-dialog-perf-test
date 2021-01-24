@@ -11,8 +11,7 @@ import {
 } from '../../shared/graphql-types';
 import { createToDo, updateToDo } from '../to-do-actions';
 import { makeStyles } from '@material-ui/core/styles';
-import { useDialogParams } from '../hooks/useDialogParams';
-import { useDialogCloser } from '../hooks/useDialogCloser';
+import { useDialogParams, useDialogCloser } from 'react-dialog-handler';
 
 const initialState = {
   title: '',
